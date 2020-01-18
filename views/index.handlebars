@@ -1,37 +1,58 @@
-<h1>BurgerFT Kitchen Orders - LET'S GET ON IT!</h1>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 mb-2 team-heading">
+            <h1 class="text-center">BurgerFT Kitchen Orders - LET'S GET ON IT!</h1>
+        </div>
+    </div>
+</div>
+{{!-- <div class="container"> --}}
+    <div class="row">
+        <div class="col-sm-2">
+            <form class="create-form ml-4">
+                <div class="form-group mt-3">
+                <h2>Add Order from Menu</h2>
+                    <label for="ca">Menu Item:</label>
+                    <input type="text" id="ca" name="name">
+                </div>
+                <div class="form-group">
+                    <label for="served">Order Routing?</label><br>
+                    <input type="radio" name="served" value="0" checked> Send to the Kitchen<br>
+                    <input type="radio" name="served" value="1"> Record as Served
+                </div>
+                <button type="submit">New Order</button>
+            </form>
+        </div>
+        <div class="col-sm-10 active-orders">
+          <h2>ORDERS IN</h2>
+          {{#each orders}}
+            {{#unless served}}
+              <div class="card order-card">
+                  <div class="card-header regularPriority-card">
+                      <h5 class="card-title">{{menuItem}}</h5>
+                  </div>
+                  <div class="card-body">
+                      <h6 class="card-title"><i class="fa fa-stopwatch fa-lg mr-1"></i>
+                      <i id="id-{{order_id}}" class="t" width="100px" data-createdat='{{createdAt}}'> 00:00 </i></h6>
+                      {{> orders/order-block}}    
+                  </div>
+              </div>
+            {{/unless}}
+          {{/each}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 ml-4">
+            <div class="row">
+                <h2>Orders Served</h2>
+            </div>
+            <ul>
+                {{#each orders}}
+                    {{#if served}} 
+                        <li><i class="fa fa-clipboard-check fa-lg mr-1"></i>{{> orders/order-block}}{{menuItem}}</li>
+                    {{/if}} 
+                {{/each}}
+            </ul>
+            </div>
+    </div>
+{{!-- </div> --}}
 
-<h2>ORDERS IN</h2>
-<ul>
-  {{#each orders}}
-    {{#unless served}} 
-      {{> orders/order-block}}
-    {{/unless}} 
-  {{/each}}
-</ul>
-
-<h2>Orders Served</h2>
-<ul>
-  {{#each orders}}
-    {{#if served}}
-      {{> orders/order-block}}
-      </li>      
-    {{/if}}
-  {{/each}}
-</ul>
-
-<h2>Add Order from Menu</h2>
-<form class="create-form">
-
-  <div class="form-group">
-    <label for="ca">Menu Item:</label>
-    <input type="text" id="ca" name="name">
-  </div>
-
-  <div class="form-group">
-    <label for="served">Order Routing?</label><br>
-    <input type="radio" name="served" value="0" checked> Send to the Kitchen<br>
-    <input type="radio" name="served" value="1"> Record as Served
-  </div>
-
-  <button type="submit">New Order</button>
-</form>

@@ -1,6 +1,82 @@
+body {
+  background-image: url('/assets/images/embossed-diamond.gif');
+  background-color: wheat;
+}
+.team-heading {
+  height: 80px;
+  width: 75%;
+  padding: 10px 0 0 0;
+  background-color: yellow;
+  border-radius: 100px;
+  margin: auto;
+  text-align: center;
+  border: 4px solid black;
+  box-shadow: 4px 4px lightgray;
+}
+
+.order-card {
+  float: left;
+  width: 200px;
+  height: 150px;
+  margin: 10px 10px 10px 10px;
+  font-size: 0.8rem; 
+  background-color: lightblue;
+  border-radius: 10px;
+  border: 2px solid black;
+  box-shadow: 4px 4px lightgray;
+}
+.card-title.fa {
+  width: 100px;
+}
+.change-served, .delete-order {
+  width: 70px;
+  background-color: lightgray;
+  border-radius: 4px;
+  margin: 0 6px 0 0;
+  text-align: center;
+  font-weight: 400;
+  border: 2px solid black;
+  box-shadow: 2px 2px lightgray;
+}
+.change-served:hover, .delete-order:hover {
+  font-size: 1.5rem;
+  background-color: white;
+  transition: all .3s ease-in-out;
+}
+.change-served:active, .delete-order:active {
+  font-size: 2rem;
+  background-color: gray;
+  transform: translateY(4px);
+}
+
+.regularPriority-card {
+  background-color: lightblue;
+}
+
+.yellow {
+  width: 100px;
+  color: black;
+  font-weight: 1000;
+  background-color: yellow;
+  border: 2px solid black;
+  border-radius: 2 px;
+}
+
+.red {
+  width: 100px;
+  color:white;
+  font-weight: 1000;
+  background-color: red;
+  border: 2px solid black;
+  border-radius: 2 px;
+}
+
 li {
+  width: 400px;
   padding: 5px;
   margin: 5px;
+  border: 2px solid black;
+  box-shadow: 4px 4px lightgray;
   background: #faebd7;
 }
 
@@ -14,6 +90,12 @@ li {
   background: aqua;
 }
 
-.form-group {
-  margin-bottom: 5px;
+.create-form {
+  width: 200px;
+  padding: 5px;
+  background-color: white;
+  border-radius: 4px;
+  margin: 0 6px 0 0;
+  border: 2px solid black;
+  box-shadow: 2px 2px lightgray;
 }
