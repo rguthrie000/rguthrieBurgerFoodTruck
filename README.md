@@ -9,6 +9,10 @@ macro-replacement simplifying embedding of database records in data-* attributes
 
 Deployed on heroku, configuration control on github.
 
+Heroku:  https://damp-taiga-10200.herokuapp.com/
+
+Github:  rguthrie000/rguthrieBurgerFoodTruck
+
 # Requirements
 
 Functional requirements for a Minimum Viable Product:
