@@ -5,9 +5,6 @@
 const express = require("express");
 const exphbs  = require("express-handlebars");
 
-// Global enablement of console logging.
-const debug = (process.argv[2] == '-d');
-
 // Configure Express and Handlebars
 let PORT = process.env.PORT? process.env.PORT : 8080;
 let app = express();
@@ -22,7 +19,5 @@ let routes = require("./controllers/burgerControl.js");
 app.use(routes);
 
 // Let's go to work!
-app.listen(PORT, () => {console.log(`Serving http://localhost:${PORT}. ${debug? 'Console logging on.':''} `);});
+app.listen(PORT, () => {console.log(`Serving http://localhost:${PORT}.`);});
 
-// make debug flag available
-module.exports = debug;

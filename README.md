@@ -1,9 +1,12 @@
 # rguthrieBurgerFoodTruck
-Full Stack App to track posting and delivery of orders to a Food Truck. Future features will track supply
-inventory and revenue.
+Full Stack App to track posting and delivery of orders to a Food Truck. Create, Read, Update, Delete is implemented in an
+MVC architecture with an ORM layer for database abstraction. Future features will track supply inventory and revenue.
 
 Client: HTML/CSS/JS
-Server: node+express, handlebars, mySQL.
+Server: node+express, handlebars, mySQL. Object-Relational Mapping is used internally to abstract the SQL interface 
+from the route handling.  handlebars, specifically express-handlebars, is used for HTML templating, with handlebars
+macro-replacement simplifying embedding of database records in data-* attributes of HTML tags.
+
 Deployed on heroku, configuration control on github.
 
 # Requirements

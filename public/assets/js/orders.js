@@ -1,38 +1,40 @@
-// Make sure we wait to attach our handlers until the DOM is fully loaded.
-$(function() {
+// Client-side JS to service the buttons and order timers.
 
-  let debug = true;
+// Wait for DOM load.
+$(function() {
 
   $(".change-served").on("click", function(event) {
     let id = $(this).data("id");
     let newServed = $(this).data("newserved");
-    
-    console.log(`Requesting toggle request; served ${newServed} --> ${newServed ^ 1}`);
+    // toggle served status 
     newServed ^= 1;
     let newServedState = {
       served: newServed
     };
 
-    // Send the PUT request.
+    // And PUT to the server for database update.
     $.ajax(`/api/orders/${id}`, {type: "PUT", data: newServedState})
     .then( () => {
         if (debug) console.log("changed served to", newServed);
-        // Reload the page to get the updated list
+        // Reload the page to get the updated list.
+        // Note that the timers run on the difference between
+        // present time and creation time -- so state information
+        // between the client and server is not changing with time.
+        // the application is RESTful.
         location.reload();
       }
     );
   });
 
   $(".create-form").on("submit", (event) => {
-    // Make sure to preventDefault on a submit event.
+    // Only you can prevent event bubbling!
     event.preventDefault();
 
+    // read form data
     let newOrder = {
       menuItem: $("#ca").val().trim(),
       served: $("[name=served]:checked").val().trim()
     };
-
-    if (debug) console.log(`submitting order; menuItem ${newOrder.menuItem}, served ${newOrder.served}`);
 
     // Send the POST request.
     $.ajax("/api/orders", {type: "POST", data: newOrder})
@@ -44,6 +46,7 @@ $(function() {
     );
   });
 
+  // Handle DELETE similarly.
   $(".delete-order").on("click", function(event) {
     let id = $(this).data("id");
 
@@ -58,6 +61,12 @@ $(function() {
   });
 });
 
+// Data is delivered here (to the client) by embedding database
+// information in HTML data-* attributes.  So on every page 
+// reload, the data is refreshed. To track time for orders,
+// their creation time is sent, and this function is used to
+// measure elapsed time from creation time to run time.
+//
 function timeDiff(mysqlTime) {
   
     function month(monthName) {
@@ -78,6 +87,11 @@ function timeDiff(mysqlTime) {
       }
     }
 
+  // Data formats for mySQL and JS are the same, so minimal work is
+  // required to convert the creation time to the milliseconds-from-19700101 
+  // format which will allow direct subtraction of creation time from
+  // current time.
+  //
   // mySQL: "sat jan 18 2020 10:59:38 gmt-0500 (eastern standard time)"
   // JS:    "Sat Jan 18 2020 11:18:54 GMT-0500 (Eastern Standard Time)"
 
@@ -105,6 +119,7 @@ function clockTick() {
     // fetch the time
     let timeThen = timeStr;
     let ageSeconds = timeDiff(timeThen);
+    // assign the timer background color based on order age
     if (ageSeconds > 600) {
       $(this).toggleClass("yellow",false);
       $(this).toggleClass("red"   ,true);
@@ -113,9 +128,11 @@ function clockTick() {
         $(this).toggleClass("yellow",true);
       }
     }
+    // format to minutes:seconds
     let dtMin = Math.floor(ageSeconds / 60);
     let dtSec = Math.floor(ageSeconds % 60);
     let outStr = `${(dtMin < 10? '0':'')+dtMin}:${(dtSec < 10? '0':'')+dtSec}`;
+    // and post to the order card
     $(this).text(outStr);
   }) 
 }
