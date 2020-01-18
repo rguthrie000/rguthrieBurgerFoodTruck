@@ -16,8 +16,10 @@ if (process.env.JAWSDB_URL) {
 
 // Connect to our database
 connection.connect((err) => {
-  if (err) {console.error("error connecting: " + err.stack); return;}
-  console.log(`Connected to mySQL.burgerFT_db, threadId ${connection.threadId}.`);
+  if (!process.env.JAWSDB_URL) {
+    if (err) {console.error("error connecting: " + err.stack); return;}
+    console.log(`Connected to mySQL.burgerFT_db, threadId ${connection.threadId}.`);
+  }
 });
 
 module.exports = connection;

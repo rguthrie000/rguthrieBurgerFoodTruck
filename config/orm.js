@@ -16,8 +16,6 @@ let orm = {
   create: (table, cols, vals, cb) => {
     let queryStr = `INSERT INTO ${table} (${cols.join(',')}) VALUES (?${',?'.repeat(vals.length-1)}) `;
 
-    if (debug) console.log(vals.length, queryStr);
-
     connection.query(queryStr, vals, (err, res) => {
       if (err) {throw err;} cb(res);});
   },
@@ -32,16 +30,12 @@ let orm = {
     }  
     queryStr += `${arr.join(',')} WHERE ${condition}`;
 
-    if (debug) console.log(queryStr);
-
     connection.query(queryStr, (err, res) => {if (err) {throw err;} cb(res);});
   },
 
   // mySQL: DELETE FROM table WHERE condition;
   delete: (table, condition, cb) => {
     let queryStr = `DELETE FROM ${table} WHERE ${condition}`;
-
-    if (debug) console.log(queryStr);
 
     connection.query(queryStr, (err, res) => {if (err) {throw err;} cb(res);});
   }

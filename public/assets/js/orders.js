@@ -15,7 +15,6 @@ $(function() {
     // And PUT to the server for database update.
     $.ajax(`/api/orders/${id}`, {type: "PUT", data: newServedState})
     .then( () => {
-        if (debug) console.log("changed served to", newServed);
         // Reload the page to get the updated list.
         // Note that the timers run on the difference between
         // present time and creation time -- so state information
@@ -39,7 +38,6 @@ $(function() {
     // Send the POST request.
     $.ajax("/api/orders", {type: "POST", data: newOrder})
     .then( () => {
-        if (debug) console.log(`ordered ${newOrder.menuItem}`);
         // Reload the page to get the updated list
         location.reload();
       }
@@ -53,7 +51,6 @@ $(function() {
     // Send the DELETE request.
     $.ajax(`/api/orders/${id}`, {type: "DELETE"})
     .then( () => {
-        if (debug) console.log("deleted order", id);
         // Reload the page to get the updated list
         location.reload();
       }
