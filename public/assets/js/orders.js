@@ -86,27 +86,64 @@ function timeDiff(mysqlTime) {
 
   // Data formats for mySQL and JS are the same, so minimal work is
   // required to convert the creation time to the milliseconds-from-19700101 
-  // format which will allow direct subtraction of creation time from
+  // format, which will allow direct subtraction of creation time from
   // current time.
   //
-  // mySQL: "sat jan 18 2020 10:59:38 gmt-0500 (eastern standard time)"
-  // JS:    "Sat Jan 18 2020 11:18:54 GMT-0500 (Eastern Standard Time)"
+  // Uh oh, heroku's database presents the same time in a different way.  Looks
+  // like we're going to have to deal with timezones!
+  //                     0   1   2  3    4        5        6        7        8    
+  // JS:                "Sat Jan 18 2020 11:18:54 GMT-0500 (Eastern Standard Time)"
+  // mySQL, localhost:  "Sun Jan 19 2020 07:18:54 GMT-0500 (Eastern Standard Time)"
+  // mySQL, JAWS_db:    "Sun Jan 19 2020 12:18:54 GMT-0000 (Coordinated Universal Time)"
+  
+  let thenStr = mysqlTime;
+
+  // Mock-ups for testing TZ correction
+  // thenStr = "Sun Jan 19 2020 07:18:54 GMT-0500 (Eastern Standard Time)";
+  // thenStr = "Sun Jan 19 2020 12:18:54 GMT-0000 (Coordinated Universal Time)";
+  // thenStr = "Sun Jan 19 2020 13:18:54 GMT+0100 (Central European Time)";
 
   // separate the mySQL string into word strings
-  let thenArr = mysqlTime.split(' ');
+  let thenArr = thenStr.split(' ');
+
   // then break up the hour, minute, and second
   let hhmmss = thenArr[4].split(':');
  
   // convert the mySQL time to a JS date object using the Date class constructor.  Note than months are numbered 0-11.
   // JS input format for converting to the date and time shown above for JS: 'new Date(2020, 0, 18, 11, 18, 54, 0);
   let timeThen = new Date(thenArr[3], month(thenArr[1]), thenArr[2], hhmmss[0], hhmmss[1], hhmmss[2], 0);
+
   // convert to the number of milliseconds since the start of 1970-01-01
   let t1 = timeThen.getTime();  
-  // get and convert to ms the time now
-  let timeNow = new Date();
-  let t2 = timeNow.getTime();
-  // return the time difference in seconds
-  return(0.001*(Number(t2)-Number(t1)));
+
+  // t1 must be adjusted for UTC.  We need the last part of thenArr[5]...
+  let wLen = thenArr[5].length;
+  let UTCoffsetSign = thenArr[5].slice(wLen-5,wLen-4);
+  let UTCoffsetHr   = thenArr[5].slice(wLen-4,wLen-2);
+  let UTCoffsetMin  = thenArr[5].slice(wLen-2);
+  
+  // console.log(`UTCoffset: thenArr[5] ${thenArr[5]} (length ${wLen}) sign ${UTCoffsetSign} hr ${UTCoffsetHr} min ${UTCoffsetMin}`)
+  
+  //                  (          hrs       +          fraction of hr)   * min/hr * sec/min * ms/sec
+  let UTCoffset     = (Number(UTCoffsetHr) + (Number(UTCoffsetMin)/60)) *   60   *   60    * 1000;
+
+  // if sign is '-', t1 reads behind UTC, so add the offset; if sign is '+', t1 reads ahead, so 
+  // subtract, or in other words, 'add the inverse'.
+  UTCoffset = (UTCoffsetSign == '-') ? UTCoffset :-UTCoffset;
+
+  t1 = Number(t1) + UTCoffset;
+  
+  // get the time now (ms since 197001010000 UTC)
+  let t = new Date();                    // local time in ms
+  let tzOffset = t.getTimezoneOffset();  // adjustment to get to UTC, in minutes
+  t2 = Date.now() + (Number(tzOffset) * 60 * 1000);
+
+  // find the time difference in seconds
+  let tDiffSec = 0.001*(Number(t2)-t1);
+
+  // console.log(`Local tz offset: ${tzOffset}. For: ${thenStr}, UTCoffset is ${UTCoffset}, and age is ${tDiffSec}`);
+
+  return(tDiffSec);
 }
 
 function clockTick() {
