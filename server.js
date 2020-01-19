@@ -1,5 +1,14 @@
 // generic Node/Express/Handlebars startup file
 // rguthrie, 20200117
+//
+// external link to this project on heroku:
+//
+//      https://damp-taiga-10200.herokuapp.com/
+//
+// rguthrie Portfolio page: 
+//
+//      https://rguthrie000.github.io/rguthriePortfolio/
+//
 
 // Dependencies
 const express = require("express");
