@@ -155,6 +155,7 @@ function clockTick() {
     // fetch the time
     let timeThen = timeStr;
     let ageSeconds = timeDiff(timeThen);
+    ageSeconds = ageSeconds > 10800? 10800 : ageSeconds;
     // assign the timer background color based on order age
     if (ageSeconds > 600) {
       $(this).toggleClass("yellow",false);
